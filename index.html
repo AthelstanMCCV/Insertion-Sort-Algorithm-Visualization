@@ -13,10 +13,10 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #334155;
+            color: #e2e8f0;
         }
 
         .container {
@@ -32,13 +32,14 @@
         .header h1 {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #1e293b;
+            color: #f8fafc;
             margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
             font-size: 1.1rem;
-            color: #64748b;
+            color: #cbd5e1;
         }
 
         .main-content {
@@ -55,59 +56,107 @@
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .visualization-area {
-            padding: 30px;
-            background: #f8fafc;
-            min-height: 350px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            min-height: 400px;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
-            gap: 2px;
-            overflow-x: auto;
-        }
-
-        .bar {
-            min-width: 8px;
-            border-radius: 4px 4px 0 0;
-            transition: all 0.3s ease;
+            flex-wrap: wrap;
+            gap: 8px;
+            overflow: visible;
             position: relative;
+        }
+
+        .playing-card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 10px;
-            font-weight: 600;
-            padding-top: 4px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            cursor: pointer;
+            border: 2px solid #e5e7eb;
         }
 
-        .bar.unsorted {
-            background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+        .playing-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 10px;
+            background: linear-gradient(45deg, transparent, transparent);
+            z-index: -1;
+            transition: all 0.3s ease;
         }
 
-        .bar.current {
-            background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        .playing-card.unsorted {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #475569;
+            border-color: #cbd5e1;
         }
 
-        .bar.comparing {
-            background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
-            transform: scale(1.02);
+        .playing-card.current {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: #dc2626;
+            border-color: #ef4444;
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+            z-index: 10;
         }
 
-        .bar.shifting {
-            background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%);
-            transform: translateX(2px);
+        .playing-card.current::before {
+            background: linear-gradient(45deg, #ef4444, #dc2626, #ef4444);
         }
 
-        .bar.sorted {
-            background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+        .playing-card.comparing {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            color: #d97706;
+            border-color: #f59e0b;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            z-index: 8;
+        }
+
+        .playing-card.comparing::before {
+            background: linear-gradient(45deg, #f59e0b, #d97706, #f59e0b);
+        }
+
+        .playing-card.shifting {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            color: #ea580c;
+            border-color: #fb923c;
+            transform: translateX(10px) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(251, 146, 60, 0.4);
+            z-index: 6;
+        }
+
+        .playing-card.sorted {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            color: #16a34a;
+            border-color: #22c55e;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .playing-card.sorted::before {
+            background: linear-gradient(45deg, #22c55e, #16a34a, #22c55e);
         }
 
         .controls {
@@ -116,20 +165,22 @@
             flex-wrap: wrap;
             gap: 15px;
             align-items: center;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: #334155;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn:disabled {
@@ -143,19 +194,19 @@
         }
 
         .btn-primary:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
-            background: white;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: #374151;
             border: 2px solid #e5e7eb;
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: #f9fafb;
-            border-color: #d1d5db;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            transform: translateY(-1px);
         }
 
         .control-group {
@@ -181,31 +232,32 @@
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .slider::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             cursor: pointer;
             border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         .select {
-            padding: 8px 12px;
+            padding: 10px 14px;
             border: 2px solid #e5e7eb;
             border-radius: 6px;
             background: white;
             font-size: 14px;
             cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar {
@@ -216,6 +268,7 @@
 
         .explanation-panel {
             padding: 20px;
+            color: #334155;
         }
 
         .explanation-panel h3 {
@@ -248,18 +301,25 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-size: 12px;
         }
 
-        .legend-color {
-            width: 16px;
-            height: 16px;
+        .legend-card {
+            width: 20px;
+            height: 28px;
             border-radius: 3px;
+            border: 1px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 600;
         }
 
         .algorithm-info {
             padding: 20px;
+            color: #334155;
         }
 
         .algorithm-info h3 {
@@ -296,6 +356,118 @@
             border-radius: 6px;
         }
 
+        .current-elements-display {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .current-elements-display h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1e293b;
+            text-align: center;
+        }
+
+        .elements-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .element-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .element-display .label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .element-card {
+            width: 80px;
+            height: 112px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 3px solid transparent;
+        }
+
+        .element-card.current {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            color: #dc2626;
+            border-color: #ef4444;
+            animation: float-current 2s infinite ease-in-out;
+        }
+
+        .element-card.comparing {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            color: #d97706;
+            border-color: #f59e0b;
+            animation: float-comparing 2s infinite ease-in-out;
+        }
+
+        .element-card.empty {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #9ca3af;
+            border: 3px dashed #d1d5db;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes float-current {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        @keyframes float-comparing {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(-1deg); }
+        }
+
+        .creators-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .creators-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+        }
+
+        .creators-names {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         @media (max-width: 1024px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -313,6 +485,12 @@
             .control-group {
                 justify-content: space-between;
             }
+
+            .playing-card {
+                width: 50px;
+                height: 70px;
+                font-size: 14px;
+            }
         }
 
         @media (max-width: 640px) {
@@ -322,7 +500,7 @@
             
             .visualization-area {
                 padding: 20px;
-                min-height: 250px;
+                min-height: 300px;
             }
             
             .controls {
@@ -330,8 +508,24 @@
             }
             
             .btn {
-                padding: 8px 16px;
+                padding: 10px 18px;
                 font-size: 13px;
+            }
+
+            .playing-card {
+                width: 45px;
+                height: 63px;
+                font-size: 12px;
+            }
+
+            .elements-container {
+                gap: 20px;
+            }
+            
+            .element-card {
+                width: 60px;
+                height: 84px;
+                font-size: 18px;
             }
         }
 
@@ -340,6 +534,24 @@
             height: 16px;
             fill: currentColor;
         }
+
+        .table-surface {
+            background: radial-gradient(ellipse at center, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+            position: relative;
+        }
+
+        .table-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -347,17 +559,34 @@
         <!-- Header -->
         <div class="header">
             <h1>Insertion Sort Visualizer</h1>
-            <p>Watch how insertion sort builds a sorted array one element at a time</p>
+            <p>Watch how insertion sort organizes playing cards one at a time</p>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <!-- Visualization Section -->
             <div class="visualization-section">
+                <!-- Current Elements Display -->
+                <div class="card">
+                    <div class="current-elements-display">
+                        <h4>Current Operation</h4>
+                        <div class="elements-container">
+                            <div class="element-display">
+                                <div class="label">Current Card</div>
+                                <div class="element-card empty" id="currentElementBox">-</div>
+                            </div>
+                            <div class="element-display">
+                                <div class="label">Comparing With</div>
+                                <div class="element-card empty" id="comparingElementBox">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Visualization Area -->
                 <div class="card">
-                    <div class="visualization-area" id="visualizationArea">
-                        <!-- Bars will be generated here -->
+                    <div class="visualization-area table-surface" id="visualizationArea">
+                        <!-- Cards will be generated here -->
                     </div>
                 </div>
 
@@ -375,7 +604,7 @@
                             <svg class="icon" viewBox="0 0 24 24">
                                 <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
                             </svg>
-                            Shuffle
+                            Shuffle Cards
                         </button>
 
                         <button class="btn btn-secondary" id="resetBtn">
@@ -394,14 +623,14 @@
                         </div>
 
                         <div class="control-group">
-                            <label for="sizeSelect">Size:</label>
+                            <label for="sizeSelect">Cards:</label>
                             <select id="sizeSelect" class="select">
+                                <option value="8">8</option>
                                 <option value="10">10</option>
-                                <option value="20" selected>20</option>
-                                <option value="30">30</option>
-                                <option value="50">50</option>
-                                <option value="75">75</option>
-                                <option value="100">100</option>
+                                <option value="12" selected>12</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
                             </select>
                         </div>
                     </div>
@@ -419,25 +648,25 @@
                         </div>
 
                         <div class="legend">
-                            <h4>Color Legend:</h4>
+                            <h4>Card States:</h4>
                             <div class="legend-item">
-                                <div class="legend-color" style="background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);"></div>
+                                <div class="legend-card" style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: #475569;">42</div>
                                 <span>Unsorted</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);"></div>
-                                <span>Current Element</span>
+                                <div class="legend-card" style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); color: #dc2626;">42</div>
+                                <span>Current Card</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);"></div>
+                                <div class="legend-card" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #d97706;">42</div>
                                 <span>Comparing</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%);"></div>
+                                <div class="legend-card" style="background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%); color: #ea580c;">42</div>
                                 <span>Shifting</span>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);"></div>
+                                <div class="legend-card" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); color: #16a34a;">42</div>
                                 <span>Sorted</span>
                             </div>
                         </div>
@@ -448,13 +677,13 @@
                 <div class="card">
                     <div class="algorithm-info">
                         <h3>How It Works</h3>
-                        <p>Insertion sort builds the sorted array one element at a time:</p>
+                        <p>Insertion sort organizes cards like sorting a hand of playing cards:</p>
                         <ol>
-                            <li>Start with the second element</li>
-                            <li>Compare it with elements in the sorted portion</li>
-                            <li>Shift larger elements to the right</li>
-                            <li>Insert the current element in its correct position</li>
-                            <li>Repeat until all elements are sorted</li>
+                            <li>Pick up the next unsorted card</li>
+                            <li>Compare it with cards in the sorted hand</li>
+                            <li>Slide larger cards to the right</li>
+                            <li>Insert the card in its correct position</li>
+                            <li>Repeat until all cards are sorted</li>
                         </ol>
                         <div class="complexity">
                             <strong>Time Complexity:</strong> O(n²)<br>
@@ -463,6 +692,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Creators Section -->
+        <div class="creators-section">
+            <h3>Created by</h3>
+            <div class="creators-names">Hans Lao & Vaniel Cornelio</div>
         </div>
     </div>
 
@@ -473,7 +708,7 @@
                 this.isAnimating = false;
                 this.isPaused = false;
                 this.speed = 50;
-                this.arraySize = 20;
+                this.arraySize = 12;
                 this.animationId = null;
                 
                 this.initializeElements();
@@ -489,6 +724,28 @@
                 this.speedSlider = document.getElementById('speedSlider');
                 this.sizeSelect = document.getElementById('sizeSelect');
                 this.explanationText = document.getElementById('explanationText');
+                this.currentElementBox = document.getElementById('currentElementBox');
+                this.comparingElementBox = document.getElementById('comparingElementBox');
+            }
+
+            updateCurrentElements(currentValue = null, comparingValue = null) {
+                // Update current element display
+                if (currentValue !== null) {
+                    this.currentElementBox.textContent = currentValue;
+                    this.currentElementBox.className = 'element-card current';
+                } else {
+                    this.currentElementBox.textContent = '-';
+                    this.currentElementBox.className = 'element-card empty';
+                }
+
+                // Update comparing element display
+                if (comparingValue !== null) {
+                    this.comparingElementBox.textContent = comparingValue;
+                    this.comparingElementBox.className = 'element-card comparing';
+                } else {
+                    this.comparingElementBox.textContent = '-';
+                    this.comparingElementBox.className = 'element-card empty';
+                }
             }
 
             setupEventListeners() {
@@ -508,13 +765,14 @@
                 this.array = [];
                 for (let i = 0; i < this.arraySize; i++) {
                     this.array.push({
-                        value: Math.floor(Math.random() * 300) + 10,
+                        value: Math.floor(Math.random() * 99) + 1,
                         id: i,
                         status: 'unsorted'
                     });
                 }
                 this.renderArray();
-                this.updateExplanation("Array generated. Click 'Start Animation' to begin sorting.");
+                this.updateCurrentElements();
+                this.updateExplanation("Cards shuffled. Click 'Start Animation' to begin sorting.");
             }
 
             shuffleArray() {
@@ -531,28 +789,24 @@
                 
                 this.array.forEach(element => element.status = 'unsorted');
                 this.renderArray();
-                this.updateExplanation("Array reset. Click 'Start Animation' to begin sorting.");
+                this.updateCurrentElements();
+                this.updateExplanation("Cards reset. Click 'Start Animation' to begin sorting.");
                 this.updateStartButton();
             }
 
             renderArray() {
-                const maxValue = Math.max(...this.array.map(el => el.value));
-                const barWidth = Math.max(Math.floor(800 / this.array.length) - 2, 8);
-                
                 this.visualizationArea.innerHTML = '';
                 
                 this.array.forEach((element, index) => {
-                    const bar = document.createElement('div');
-                    bar.className = `bar ${element.status}`;
-                    bar.style.height = `${(element.value / maxValue) * 250}px`;
-                    bar.style.width = `${barWidth}px`;
-                    bar.id = `bar-${index}`;
+                    const card = document.createElement('div');
+                    card.className = `playing-card ${element.status}`;
+                    card.id = `card-${index}`;
+                    card.textContent = element.value;
                     
-                    if (this.array.length <= 20) {
-                        bar.textContent = element.value;
-                    }
+                    // Add slight delay for staggered animation
+                    card.style.animationDelay = `${index * 0.1}s`;
                     
-                    this.visualizationArea.appendChild(bar);
+                    this.visualizationArea.appendChild(card);
                 });
             }
 
@@ -607,15 +861,16 @@
                 this.isPaused = false;
                 this.updateStartButton();
                 
-                const delay = () => 1100 - this.speed * 10;
+                const delay = () => 1200 - this.speed * 10;
 
                 for (let i = 1; i < this.array.length; i++) {
                     if (!this.isAnimating) break;
 
-                    // Mark current element
+                    // Pick up current card
                     this.array[i].status = 'current';
+                    this.updateCurrentElements(this.array[i].value);
                     this.renderArray();
-                    this.updateExplanation(`Step ${i}: Selecting element ${this.array[i].value} at position ${i} to insert into sorted portion.`);
+                    this.updateExplanation(`Step ${i}: Picking up card ${this.array[i].value} to find its correct position in the sorted hand.`);
                     
                     await this.sleep(delay());
                     if (!this.isAnimating) break;
@@ -623,7 +878,7 @@
                     let j = i - 1;
                     const key = { ...this.array[i] };
 
-                    // Compare and shift elements
+                    // Compare and shift cards
                     while (j >= 0 && this.array[j].value > key.value) {
                         if (!this.isAnimating) break;
 
@@ -638,15 +893,16 @@
                         if (j + 1 < this.array.length) {
                             this.array[j + 1].status = 'shifting';
                         }
+                        this.updateCurrentElements(key.value, this.array[j].value);
                         this.renderArray();
                         this.updateExplanation(
-                            `Comparing ${key.value} with ${this.array[j].value}. Since ${this.array[j].value} > ${key.value}, shift ${this.array[j].value} to the right.`
+                            `Comparing card ${key.value} with card ${this.array[j].value}. Since ${this.array[j].value} > ${key.value}, slide card ${this.array[j].value} to the right.`
                         );
                         
                         await this.sleep(delay());
                         if (!this.isAnimating) break;
 
-                        // Shift element
+                        // Shift card to the right
                         this.array[j + 1] = { ...this.array[j], status: 'shifting' };
                         this.array[j].status = 'sorted';
                         j--;
@@ -656,25 +912,27 @@
                         if (!this.isAnimating) break;
                     }
 
-                    // Insert the key at correct position
+                    // Insert the card in correct position
                     this.array[j + 1] = { ...key, status: 'sorted' };
+                    this.updateCurrentElements();
                     this.renderArray();
-                    this.updateExplanation(`Inserted ${key.value} at position ${j + 1}. Elements 0 to ${i} are now sorted.`);
+                    this.updateExplanation(`Placed card ${key.value} in position ${j + 1}. Cards 0 to ${i} are now sorted in the hand.`);
                     
                     await this.sleep(delay());
                     if (!this.isAnimating) break;
 
-                    // Mark all elements up to i as sorted
+                    // Mark all cards up to i as sorted
                     for (let k = 0; k <= i; k++) {
                         this.array[k].status = 'sorted';
                     }
                     this.renderArray();
                 }
 
-                // Mark all as sorted
+                // Mark all cards as sorted
                 this.array.forEach(element => element.status = 'sorted');
+                this.updateCurrentElements();
                 this.renderArray();
-                this.updateExplanation("Sorting complete! All elements are now in ascending order.");
+                this.updateExplanation("Perfect! All cards are now sorted in ascending order. The hand is completely organized!");
                 
                 this.isAnimating = false;
                 this.isPaused = false;
